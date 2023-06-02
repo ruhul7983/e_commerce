@@ -46,6 +46,7 @@ dependencies:
   pinput: ^2.2.31
   shared_preferences: ^2.1.1
   flutter_launcher_icons: ^0.13.1
+  cached_network_image: ^3.2.3
 
 dev_dependencies:
   flutter_test:

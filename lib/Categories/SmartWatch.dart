@@ -6,6 +6,7 @@ import 'package:e_mart/service/apis.dart';
 
 import '../main.dart';
 import '../model/productmodel.dart';
+import '../views/ProductDisplayPage.dart';
 
 class SmartWatch extends StatefulWidget {
   const SmartWatch({Key? key}) : super(key: key);
@@ -56,10 +57,33 @@ class _SmartWatchState extends State<SmartWatch> {
                           crossAxisCount: 2, crossAxisSpacing: 8),
                       itemBuilder: (context, index) {
                         final item = list[index];
-                        return SingleProduct(
-                            image: item.Images,
-                            name: item.MobileName,
-                            price: item.Price);
+                        return InkWell(
+                          onTap: (){
+                            Navigator.push(
+                                context,
+                                CupertinoPageRoute(
+                                    builder: (_) => ProductDisplay(
+                                      Images: item.Images,
+                                      MobileName: item.MobileName,
+                                      StockUpdate: item.StockUpdate,
+                                      Storage: item.Storage,
+                                      Ram: item.RAM,
+                                      Display: item.Display,
+                                      Size: item.Display,
+                                      Resolution: item.Resolution,
+                                      Processor: item.Processor,
+                                      MainCamera: item.MainCamera,
+                                      FrontCamera: item.FrontCamera,
+                                      Battery: item.Battery,
+                                      Charging: item.Charging,
+                                      PrevPrice: item.PreviousPrice,
+                                      Price: item.Price, DocId: item.DocId,)));
+                          },
+                          child: SingleProduct(
+                              image: item.Images,
+                              name: item.MobileName,
+                              price: item.Price),
+                        );
                       },
                     );
                   }else{

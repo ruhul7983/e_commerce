@@ -1,12 +1,10 @@
-import 'package:e_mart/consts/consts.dart';
 import 'package:e_mart/service/apis.dart';
-import 'package:e_mart/views/auth_screen/login.dart';
 import 'package:e_mart/views/bottomNavScreen/cart.dart';
 import 'package:e_mart/widgets/widgets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:cached_network_image/cached_network_image.dart';
 import '../main.dart';
 import 'bottomNavScreen/profile.dart';
 
@@ -102,7 +100,12 @@ class _ProductDisplayState extends State<ProductDisplay> {
               ),
               Container(
                 height: mq.height * 0.3, // Adjust the height as needed
-                child: Image.network(widget.Images),
+                child: CachedNetworkImage(
+                  imageUrl: widget.Images,
+                  progressIndicatorBuilder: (context, url, downloadProgress) =>
+                      Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
+                  errorWidget: (context, url, error) => Icon(Icons.error),
+                ),
               ),
               Container(
                 height: mq.height, // Adjust the height as needed
