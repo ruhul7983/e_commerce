@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dots_indicator/dots_indicator.dart';
@@ -82,7 +83,12 @@ class _HomePageState extends State<HomePage> {
                             },
                             child: Padding(
                               padding: const EdgeInsets.only(left: 3, right: 3),
-                              child: Image.network(campaign[index]),
+                              child: CachedNetworkImage(
+                                imageUrl: campaign[index],
+                                progressIndicatorBuilder: (context, url, downloadProgress) =>
+                                    Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
+                                errorWidget: (context, url, error) => Icon(Icons.error),
+                              ),
                             ),
                           );
                         }),

@@ -59,3 +59,23 @@ Widget CardinProductDisplay(String specification,String SubText){
     );
 }
 
+//for button buy now and add to card
+Widget cButton(String buttonName){
+  return Padding(
+    padding: const EdgeInsets.only(bottom: 5,left: 4),
+    child: Container(
+      width: mq.width * 0.3,
+      height: mq.height * 0.07,
+      decoration: BoxDecoration(
+        color: Colors.red,
+        borderRadius: BorderRadius.circular(30),
+      ),
+      child: Center(
+        child: Text(buttonName,style: TextStyle(fontSize: 18,fontWeight: FontWeight.w700),),
+      ),
+    ),
+  );
+}
+
+
+

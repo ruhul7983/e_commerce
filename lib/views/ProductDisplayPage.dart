@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../main.dart';
+import 'BuyNow.dart';
 import 'bottomNavScreen/profile.dart';
 
 class ProductDisplay extends StatefulWidget {
@@ -149,7 +150,7 @@ class _ProductDisplayState extends State<ProductDisplay> {
                                 child: Text(
                                   widget.StockUpdate,
                                   style: TextStyle(
-                                    fontSize: 20,
+                                    fontSize: 17,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -164,14 +165,14 @@ class _ProductDisplayState extends State<ProductDisplay> {
                               "৳${widget.PrevPrice}",
                               style: TextStyle(
                                 decoration: TextDecoration.lineThrough,
-                                fontSize: 25,
+                                fontSize: 22,
                               ),
                             ),
                             SizedBox(width: mq.width * 0.04),
                             Text(
                               "৳${widget.Price}",
                               style: TextStyle(
-                                fontSize: 28,
+                                fontSize: 24,
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
@@ -184,15 +185,65 @@ class _ProductDisplayState extends State<ProductDisplay> {
                           thickness: 1,
                         ),
                         SizedBox(height: mq.height * 0.03),
-                        CardinProductDisplay("Specification: ", "Storage, RAM"),
-                        CardinProductDisplay(
-                            "Service: ", "15 Days Easy Return"),
+                        GestureDetector(
+                            onTap: (){
+                              showModalBottomSheet(
+                                context: context, builder: (context) {
+                                return Container(
+                                  height: mq.height * 0.7,
+                                  width: mq.width,
+                                  decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(45),
+                                            topRight: Radius.circular(45))),
+                                  child: Column(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.fromLTRB(8,8,0,0),
+                                        child: Text("Specifiaction",style: TextStyle(fontSize: 30),textAlign: TextAlign.center),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(left: 10),
+                                        child: Text("Ram: ${widget.Ram}",style: TextStyle(fontSize: 20),),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(left: 10),
+                                        child: Text("Storage: ${widget.Storage}",style: TextStyle(fontSize: 20),),
+                                      ),
+                                    ],
+                                  ),
+                                  );
+                              },);
+                            },
+                            child: CardinProductDisplay("Specification: ", "Storage, RAM")),
+                        GestureDetector(
+                          onTap: (){
+                            showModalBottomSheet(
+                              context: context, builder: (context) {
+                              return Container(
+                                height: mq.height * 0.7,
+                                width: mq.width,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(45),
+                                        topRight: Radius.circular(45))),
+                                child: Column(
+                                  children: [
+
+                                  ],
+                                ),
+                              );
+                            },);
+                          },
+                          child: CardinProductDisplay(
+                              "Service: ", "15 Days Easy Return"),
+                        ),
                         SizedBox(height: mq.height * 0.03),
                         Text(
                           "Description: ",
                           style: TextStyle(
                             color: Colors.red,
-                            fontSize: 28,
+                            fontSize: 25,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -202,19 +253,19 @@ class _ProductDisplayState extends State<ProductDisplay> {
                           thickness: 1,
                         ),
                         Text("Display: ${widget.Display}",
-                            style: TextStyle(fontSize: 18)),
+                            style: TextStyle(fontSize: 15)),
                         Text("Size: ${widget.Size}", style: TextStyle(fontSize: 18)),
                         Text("Resolution: ${widget.Resolution}",
-                            style: TextStyle(fontSize: 18)),
+                            style: TextStyle(fontSize: 15)),
                         Text("Processor: ${widget.Processor}",
-                            style: TextStyle(fontSize: 18)),
+                            style: TextStyle(fontSize: 15)),
                         Text("Main Camera: ${widget.MainCamera}",
-                            style: TextStyle(fontSize: 18)),
+                            style: TextStyle(fontSize: 15)),
                         Text("Front Camera: ${widget.FrontCamera}",
-                            style: TextStyle(fontSize: 18)),
+                            style: TextStyle(fontSize: 15)),
                         Text("Battery: ${widget.Battery}",
-                            style: TextStyle(fontSize: 18)),
-                        Text("Charging: ${widget.Charging}", style: TextStyle(fontSize: 18)),
+                            style: TextStyle(fontSize: 15)),
+                        Text("Charging: ${widget.Charging}", style: TextStyle(fontSize: 15)),
                       ],
                     ),
                   ),
@@ -237,30 +288,27 @@ class _ProductDisplayState extends State<ProductDisplay> {
                   apis.addToCart(widget.Images, widget.MobileName, widget.Price,widget.DocId);
                 }
               },
-              child: Container(
-                width: mq.width * 0.4,
-                height: mq.height * 0.07,
-                decoration: BoxDecoration(
-                  color: Colors.red,
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                child: Center(
-                  child: Text("Add to Cart",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w400),),
-                ),
-              ),
+              child: cButton("Add to Cart"),
             ),
             SizedBox(width: mq.width * 0.02,),
-            Container(
-              width: mq.width * 0.3,
-              height: mq.height * 0.07,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(30),
-                color: Colors.red,
-              ),
-              child: Center(
-                child: Text("Buy now",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w400),),
-              ),
-            ),
+            InkWell(
+                onTap: (){
+                  if(isLogin==true){//need to change in false
+                    Navigator.push(context, CupertinoPageRoute(builder: (_)=>Profile()));//need to change letter to profile page
+                  }else{
+                    Navigator.push(
+                        context,
+                        CupertinoPageRoute(
+                            builder: (_) => BuyNow(
+                                Images: widget.Images,
+                                MobileName: widget.MobileName,
+                                Storage: widget.Storage,
+                                Ram: widget.Ram,
+                                Price: widget.Price,
+                                DocId: widget.DocId)));
+                  }
+                },
+                child: cButton("Buy Now")),
           ],
         ),
       ),

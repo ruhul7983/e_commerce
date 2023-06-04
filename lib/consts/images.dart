@@ -59,6 +59,8 @@ const icFlash = "assets/icons/thunder.png";
 
 const icAirpods = "assets/icons/earphone.png";
 const icAnnoucement = "assets/icons/annoucement.png";
+const icBkash = "assets/icons/bkash.png";
+const icCOD = "assets/icons/cod.png";
 
 
 
