@@ -2,7 +2,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class apis{
   static FirebaseAuth auth = FirebaseAuth.instance;
@@ -123,6 +122,49 @@ class apis{
     return Firestore
         .collection('campaign')
         .snapshots();
+  }
+  
+  //get user number and address
+
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getAddress() {
+    if (auth.currentUser != null) {
+      return Firestore
+          .collection('user')
+          .where(auth.currentUser!.uid)
+          .snapshots();
+    } else {
+      // Return an empty stream or handle the null case according to your requirements
+      return Stream.empty();
+    }
+  }
+
+  //add to order
+  static Future setOrder(String image,String MobileName, String Price,String docid,String PaymentMethod,String address, String phone){
+    return Firestore.collection("order").doc(auth.currentUser!.uid).collection("list").doc(docid).set(
+        {
+          "Images":image,
+          "MobileName":MobileName,
+          "Price":Price,
+          "DocId":docid,
+          "Payment":PaymentMethod,
+          "Address":address,
+          "Phone":phone,
+          "Status": "Pending",
+        }
+    );
+  }
+
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getMyOrder() {
+    if (auth.currentUser != null) {
+      return Firestore
+          .collection('order')
+          .doc(auth.currentUser!.uid)
+          .collection('list')
+          .snapshots();
+    } else {
+      // Return an empty stream or handle the null case according to your requirements
+      return Stream.empty();
+    }
   }
 
 

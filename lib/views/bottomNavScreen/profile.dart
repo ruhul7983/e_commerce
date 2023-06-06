@@ -1,11 +1,16 @@
 import 'package:e_mart/consts/consts.dart';
 import 'package:e_mart/views/bottomNavScreen/cart.dart';
+import 'package:e_mart/views/profile_screen/balance.dart';
+import 'package:e_mart/views/profile_screen/myOrder.dart';
+import 'package:e_mart/views/profile_screen/settings.dart';
+import 'package:e_mart/views/profile_screen/wallet.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../main.dart';
 import '../auth_screen/login.dart';
+import '../profile_screen/faq.dart';
 
 
 class Profile extends StatefulWidget {
@@ -17,7 +22,7 @@ class Profile extends StatefulWidget {
 
 class ProfileState extends State<Profile> {
 
-  bool isLogin = true;
+  bool isLogin = true;//it will true always
   static const String KEYLOGIN = 'lgoin';
   Future<void> wheretoGo() async {
     var sharedPref = await SharedPreferences.getInstance();
@@ -90,8 +95,8 @@ class ProfileState extends State<Profile> {
                             IconButton(
                               icon: Image.asset('assets/icons/wallet.png'),
                               onPressed:()=> Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                      builder: (_) => Cart())),
+                                  CupertinoPageRoute(
+                                      builder: (_) => Wallet())),
                             ),
                             Text(
                               'Wallet',
@@ -105,10 +110,10 @@ class ProfileState extends State<Profile> {
                             IconButton(
                               icon: Image.asset(icShop),
                               onPressed: () => Navigator.of(context).push(
-                                  MaterialPageRoute(builder: (_) => Cart())),
+                                  CupertinoPageRoute(builder: (_) => myOrder())),
                             ),
                             Text(
-                              'Shipped',
+                              'My Order',
                               style: TextStyle(fontWeight: FontWeight.bold),
                             )
                           ],
@@ -117,13 +122,13 @@ class ProfileState extends State<Profile> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             IconButton(
-                              icon: Image.asset(icWallet),
+                              icon: Image.asset(icDollar),
                               onPressed:()=> Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                      builder: (_) => Cart())),
+                                  CupertinoPageRoute(
+                                      builder: (_) => Balance())),
                             ),
                             Text(
-                              'Payment',
+                              'Balance',
                               style: TextStyle(fontWeight: FontWeight.bold),
                             )
                           ],
@@ -132,7 +137,7 @@ class ProfileState extends State<Profile> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             IconButton(
-                              icon: Image.asset(icWallet), onPressed: () {},
+                              icon: Image.asset(icHeadphone), onPressed: () {},
                             ),
                             Text(
                               'Support',
@@ -150,17 +155,7 @@ class ProfileState extends State<Profile> {
                   leading: Image.asset(icFavoriteSeller, fit: BoxFit.scaleDown, width: 30, height: 30,),
                   trailing: Icon(Icons.chevron_right, color: Colors.yellow),
                   onTap: () => Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => Cart())),
-                ),
-                Divider(),
-                ListTile(
-                  title: Text('Help & Support'),
-                  subtitle: Text('Help center and legal support'),
-                  leading: Image.asset(icHeadphone),
-                  trailing: Icon(
-                    Icons.chevron_right,
-                    color: Colors.yellow,
-                  ),
+                      CupertinoPageRoute(builder: (_) => Settings())),
                 ),
                 Divider(),
                 ListTile(
@@ -169,7 +164,7 @@ class ProfileState extends State<Profile> {
                   leading: Image.asset(icChat),
                   trailing: Icon(Icons.chevron_right, color: Colors.yellow),
                   onTap: () => Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => Cart())),
+                      CupertinoPageRoute(builder: (_) => FAQ())),
                 ),
                 Divider(),
               ],

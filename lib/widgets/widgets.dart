@@ -71,7 +71,7 @@ Widget cButton(String buttonName){
         borderRadius: BorderRadius.circular(30),
       ),
       child: Center(
-        child: Text(buttonName,style: TextStyle(fontSize: 18,fontWeight: FontWeight.w700),),
+        child: Text(buttonName,style: TextStyle(fontSize: 18,fontWeight: FontWeight.w400),),
       ),
     ),
   );

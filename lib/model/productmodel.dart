@@ -16,6 +16,7 @@ class ProductModel {
     required this.Battery,
     required this.Charging,
     required this.DocId,
+    required this.Status,
   });
   late final String Images;
   late final String MobileName;
@@ -33,6 +34,7 @@ class ProductModel {
   late final String Battery;
   late final String Charging;
   late final String DocId;
+  late final String Status;
 
   ProductModel.fromJson(Map<String, dynamic> json){
     Images = json['Images']??'';
@@ -51,6 +53,7 @@ class ProductModel {
     Battery = json['Battery']??'';
     Charging = json['Charging']??'';
     DocId = json['DocId']??'';
+    Status = json['Status']??'';
   }
 
   Map<String, dynamic> toJson() {
@@ -71,6 +74,7 @@ class ProductModel {
     data['Battery'] = Battery;
     data['Charging'] = Charging;
     data['DocId'] = DocId;
+    data['Status'] = Status;
     return data;
   }
 }

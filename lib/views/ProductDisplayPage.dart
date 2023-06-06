@@ -293,7 +293,7 @@ class _ProductDisplayState extends State<ProductDisplay> {
             SizedBox(width: mq.width * 0.02,),
             InkWell(
                 onTap: (){
-                  if(isLogin==true){//need to change in false
+                  if(isLogin==false){
                     Navigator.push(context, CupertinoPageRoute(builder: (_)=>Profile()));//need to change letter to profile page
                   }else{
                     Navigator.push(

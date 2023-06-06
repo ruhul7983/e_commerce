@@ -1,7 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_mart/consts/consts.dart';
+import 'package:e_mart/service/apis.dart';
+import 'package:e_mart/views/auth_screen/login.dart';
+import 'package:e_mart/views/thankYou.dart';
 import 'package:e_mart/widgets/widgets.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../main.dart';
 
@@ -20,6 +26,31 @@ class BuyNow extends StatefulWidget {
 
 class _BuyNowState extends State<BuyNow> {
   String?selectPayment ;
+
+  bool isLogin = true;
+  static const String KEYLOGIN = 'lgoin';
+  Future<void> wheretoGo() async {
+    var sharedPref = await SharedPreferences.getInstance();
+    var isLoggedin = sharedPref.getBool(KEYLOGIN);
+    setState(() {
+      isLogin = isLoggedin ?? false;
+    });
+  }
+  @override
+  void initState() {
+    wheretoGo();
+    super.initState();
+  }
+
+  Future<void> setLoginStatus(bool value) async {
+    var sharedPref = await SharedPreferences.getInstance();
+    sharedPref.setBool(KEYLOGIN, value);
+    setState(() {
+      isLogin = value;
+    });
+  }
+  var address;
+  var phone;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,17 +73,43 @@ class _BuyNowState extends State<BuyNow> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text("Delivery Address",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w400),),
-              Container(
-                height: mq.height * 0.1,
-                width: mq.width * 0.9,
-                color: Colors.grey.shade100,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Icon(Icons.location_on_sharp),
-                    Text("Belabo, Narsingdi, Dhaka",style: TextStyle(fontSize: 18),maxLines: 1,),
-                    Icon(Icons.chevron_right),
-                  ],
+              isLogin?StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                stream: apis.getAddress(),
+                builder: (context, snapshot) {
+                  final documents = snapshot.data!.docs;
+                  final documentData = documents.first.data();//here is an issue
+                   address = documentData['address'];
+                   phone = documentData['phone'];
+                  return Container(
+                    height: mq.height * 0.1,
+                    width: mq.width * 0.9,
+                    color: Colors.grey.shade100,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Icon(Icons.location_on_sharp),
+                        Expanded(child: Text(address,style: TextStyle(fontSize: 18),overflow: TextOverflow.ellipsis,maxLines: 1,)),
+                        Icon(Icons.chevron_right),
+                      ],
+                    ),
+                  );
+                }
+              ):InkWell(
+                onTap: (){
+                  Navigator.push(context, CupertinoPageRoute(builder: (_)=>Login()));
+                },
+                child: Container(
+                  height: mq.height * 0.1,
+                  width: mq.width * 0.9,
+                  color: Colors.grey.shade100,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Icon(Icons.login),
+                      Text("Login First",style: TextStyle(fontSize: 18),maxLines: 1,),
+                      Icon(Icons.person),
+                    ],
+                  ),
                 ),
               ),
               Text("Payment methods",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w400),),
@@ -140,7 +197,18 @@ class _BuyNowState extends State<BuyNow> {
       ),
       bottomNavigationBar: BottomAppBar(
         height: mq.height * 0.09,
-        child: cButton("Place order"),
+        child: GestureDetector(
+            onTap: () async {
+              if(selectPayment=="Bkash"){
+                Navigator.push(context, CupertinoPageRoute(builder: (_)=>Login()));//need to upgrade next time in payment bkash page
+              }
+              else{
+                await apis.setOrder(
+                    widget.Images, widget.MobileName, widget.Price, widget.DocId,
+                    selectPayment.toString(),address,phone).then((value) =>Navigator.push(context, CupertinoPageRoute(builder: (_)=>ThankYou())));
+              }
+            },
+            child: cButton("Place order")),
       ),
     );
   }
